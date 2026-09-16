@@ -193,8 +193,8 @@
   .rail-tick.done{ color:var(--muted); }
   .rail-tick.active{ color:var(--accent); font-weight:700; }
 
-  /* ---------- Question card ---------- */
-  .q-card{
+  /* ---------- Card shell (question / success / bonus / recommend / feedback / thanks) ---------- */
+  .panel-card{
     background:var(--card);
     border:1px solid var(--line);
     border-radius:8px;
@@ -202,7 +202,7 @@
     padding:32px;
     animation: fade-in 0.3s ease both;
   }
-  @media (max-width:600px){ .q-card{ padding:20px; } }
+  @media (max-width:600px){ .panel-card{ padding:20px; } }
   .q-eyebrow{
     font-family:'Lexend Deca', sans-serif;
     font-size:0.78rem;
@@ -304,7 +304,7 @@
   .other-input:focus{ outline:none; border-color:var(--accent); }
   @media (max-width:460px){ .other-input{ margin-left:0; width:100%; } }
 
-  /* ---------- Groups (Schritt 4) ---------- */
+  /* ---------- Groups (Zeitbudget / Bonus-Angaben) ---------- */
   .group-block{ margin-bottom:26px; }
   .group-block:last-child{ margin-bottom:0; }
   .group-label{
@@ -334,7 +334,7 @@
   .chip:focus-visible{ outline:none; box-shadow:0 0 0 3px rgba(255,122,89,0.25); }
   .chip.selected{ background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600; }
 
-  /* ---------- Textarea (Schritt 5) ---------- */
+  /* ---------- Textarea ---------- */
   .textarea{
     width:100%;
     min-height:120px;
@@ -389,81 +389,102 @@
     text-align:right;
   }
 
-  /* ---------- Summary ---------- */
-  .summary-card{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:8px;
-    box-shadow: 0 1px 2px rgba(33,49,74,0.06);
-    padding:32px;
-    animation: fade-in 0.3s ease both;
-  }
-  @media (max-width:600px){ .summary-card{ padding:22px; } }
-  .summary-head{
+  /* ---------- Success / thanks / bonus-intro / recommend screens ---------- */
+  .panel-head{
     font-family:'Lexend Deca', sans-serif;
     font-size:1.5rem;
     font-weight:600;
     margin:0 0 8px;
     color:var(--ink);
   }
-  .summary-sub{
+  .panel-sub{
     color:var(--muted);
     font-size:0.98rem;
-    margin-bottom:24px;
+    line-height:1.55;
+    margin-bottom:0;
   }
-  .summary-list{
+  .panel-divider{
+    border:none;
     border-top:1px solid var(--line);
+    margin:28px 0;
   }
-  .summary-row{
-    display:flex;
-    justify-content:space-between;
-    gap:24px;
-    padding:14px 2px;
-    border-bottom:1px solid var(--line);
-  }
-  .summary-label{
-    font-size:0.85rem;
-    color:var(--muted);
-    flex:none;
-    width:42%;
-    font-weight:500;
-  }
-  .summary-value{
+  .upsell-title{
+    font-family:'Lexend Deca', sans-serif;
+    font-size:1.1rem;
     font-weight:600;
-    text-align:right;
+    margin:0 0 8px;
     color:var(--ink);
   }
-  .summary-actions{
+  .cta-row{
     display:flex;
     align-items:center;
-    gap:12px;
-    margin-top:28px;
+    gap:18px;
+    margin-top:20px;
     flex-wrap:wrap;
   }
-  .link-btn{
+  .btn-cta{
     font-family:'Lexend Deca', sans-serif;
-    font-size:0.88rem;
+    font-size:0.92rem;
     font-weight:600;
+    border:none;
     cursor:pointer;
+    padding:12px 26px;
     border-radius:4px;
-    padding:10px 18px;
-    border:1.5px solid var(--line);
-    background:var(--card);
-    color:var(--ink);
-  }
-  .link-btn:hover{ border-color:var(--accent); color:var(--accent); }
-  .link-btn.primary{
     background:var(--accent);
     color:#fff;
-    border-color:var(--accent);
+    transition: background-color 0.12s ease;
+    text-decoration:none;
+    display:inline-block;
   }
-  .link-btn.primary:hover{ background:var(--accent-dark); border-color:var(--accent-dark); color:#fff; }
-  .copy-note{
-    font-size:0.82rem;
+  .btn-cta:hover{ background:var(--accent-dark); }
+  .skip-link{
+    font-family:'Lexend Deca', sans-serif;
+    font-size:0.85rem;
     font-weight:600;
-    color:var(--teal);
-    align-self:center;
+    color:var(--muted);
+    background:none;
+    border:none;
+    cursor:pointer;
+    padding:0;
   }
+  .skip-link:hover{ color:var(--ink); }
+
+  /* ---------- Recommend (Ja/Nein) ---------- */
+  .choice-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+  }
+  @media (max-width:480px){ .choice-row{ grid-template-columns:1fr; } }
+  .choice-btn{
+    border:1.5px solid var(--line);
+    border-radius:8px;
+    background:var(--card);
+    padding:26px 20px;
+    text-align:center;
+    cursor:pointer;
+    font-family:'Lexend Deca', sans-serif;
+    font-size:1.05rem;
+    font-weight:600;
+    color:var(--ink);
+    transition: border-color 0.12s ease, background-color 0.12s ease;
+  }
+  .choice-btn:hover{ border-color:var(--accent); background:var(--accent-soft); }
+  .choice-btn:focus-visible{ outline:none; box-shadow:0 0 0 3px rgba(255,122,89,0.25); }
+
+  .restart-link{
+    font-family:'Lexend Deca', sans-serif;
+    font-size:0.85rem;
+    font-weight:600;
+    color:var(--muted);
+    background:none;
+    border:none;
+    cursor:pointer;
+    padding:0;
+    margin-top:24px;
+    display:inline-block;
+  }
+  .restart-link:hover{ color:var(--ink); }
 </style>
 </head>
 <body>
@@ -471,6 +492,9 @@
 
 <script>
 (function(){
+
+  /* TODO: replace with your real Google review link (Google Business Profile → "Get more reviews") */
+  const GOOGLE_REVIEW_URL = 'https://g.page/r/REPLACE-WITH-YOUR-PLACE-ID/review';
 
   const ROLES = [
     { id:'privat', badge:'P', title:'Privatpersonen', path:'privat', accent:'orange',
@@ -519,10 +543,10 @@
       { id:'zeitbudget', kind:'groups', tick:'Zeit & Format', eyebrow:'Zeitbudget & Wunscheinbindung',
         question:'Wann passt es dir am besten?', hint:'Mehrfachauswahl möglich',
         groups:[
-          { key:'wochentage', label:'Wochentage', layout:'chips', options:['Mo','Di','Mi','Do','Fr','Sa','So'] },
-          { key:'tageszeit', label:'Tageszeit', layout:'chips', options:['Vormittags','Nachmittags','Abends'] },
-          { key:'dauer', label:'Dauer', layout:'chips', options:['ca. 1 Stunde','2–3 Stunden','Tages-Workshop'] },
-          { key:'haeufigkeit', label:'Häufigkeit', layout:'chips', options:['Spontan','Wöchentlich','Monatlich'] },
+          { key:'wochentage', label:'Wochentage', layout:'chips', multiple:true, options:['Mo','Di','Mi','Do','Fr','Sa','So'] },
+          { key:'tageszeit', label:'Tageszeit', layout:'chips', multiple:true, options:['Vormittags','Nachmittags','Abends'] },
+          { key:'dauer', label:'Dauer', layout:'chips', multiple:true, options:['ca. 1 Stunde','2–3 Stunden','Tages-Workshop'] },
+          { key:'haeufigkeit', label:'Häufigkeit', layout:'chips', multiple:true, options:['Spontan','Wöchentlich','Monatlich'] },
           { key:'format', label:'Welches Format bevorzugst du?', layout:'list', options:[
             { value:'Offene Werkstatt', desc:'Flexibel vorbeikommen, Geräte nutzen & eigene Projekte umsetzen' },
             { value:'Vor-Ort-Workshop', desc:'Gemeinsam im Makerport lernen & ausprobieren' },
@@ -564,10 +588,10 @@
       { id:'zeitbudget', kind:'groups', tick:'Zeit & Format', eyebrow:'Zeitbudget & Wunscheinbindung',
         question:'Wann passt es dir am besten?', hint:'Mehrfachauswahl möglich',
         groups:[
-          { key:'wochentage', label:'Wochentage', layout:'chips', options:['Mo','Di','Mi','Do','Fr','Sa','So'] },
-          { key:'tageszeit', label:'Tageszeit', layout:'chips', options:['Vormittags','Nachmittags','Abends'] },
-          { key:'dauer', label:'Dauer', layout:'chips', options:['ca. 1 Stunde','2–3 Stunden','Tages-Workshop'] },
-          { key:'haeufigkeit', label:'Häufigkeit', layout:'chips', options:['Einmalig / Nach Bedarf','Monatlich','Quartalsweise'] },
+          { key:'wochentage', label:'Wochentage', layout:'chips', multiple:true, options:['Mo','Di','Mi','Do','Fr','Sa','So'] },
+          { key:'tageszeit', label:'Tageszeit', layout:'chips', multiple:true, options:['Vormittags','Nachmittags','Abends'] },
+          { key:'dauer', label:'Dauer', layout:'chips', multiple:true, options:['ca. 1 Stunde','2–3 Stunden','Tages-Workshop'] },
+          { key:'haeufigkeit', label:'Häufigkeit', layout:'chips', multiple:true, options:['Einmalig / Nach Bedarf','Monatlich','Quartalsweise'] },
           { key:'format', label:'Welches Format bevorzugst du?', layout:'list', options:[
             { value:'Offene Werkstatt', desc:'Flexibel vorbeikommen, Geräte nutzen & eigene Projekte umsetzen' },
             { value:'Vor-Ort-Workshop', desc:'Gemeinsam im Makerport lernen & ausprobieren' },
@@ -610,10 +634,10 @@
       { id:'zeitbudget', kind:'groups', tick:'Zeit & Format', eyebrow:'Zeitbudget & Wunscheinbindung',
         question:'Wann passt es dir am besten?', hint:'Mehrfachauswahl möglich',
         groups:[
-          { key:'wochentage', label:'Wochentage', layout:'chips', options:['Mo','Di','Mi','Do','Fr','Sa','So'] },
-          { key:'tageszeit', label:'Tageszeit', layout:'chips', options:['Morgens','Tagsüber','Abends'] },
-          { key:'dauer', label:'Dauer', layout:'chips', options:['Impulse & Pitch-Formate (1–2 Stunden)','Halbtags-Workshops (3–4 Stunden)','Tages-Inkubator / Sprint'] },
-          { key:'haeufigkeit', label:'Häufigkeit', layout:'chips', options:['Einmalig / Nach Bedarf','Regelmäßig','Quartalsweise'] },
+          { key:'wochentage', label:'Wochentage', layout:'chips', multiple:true, options:['Mo','Di','Mi','Do','Fr','Sa','So'] },
+          { key:'tageszeit', label:'Tageszeit', layout:'chips', multiple:true, options:['Morgens','Tagsüber','Abends'] },
+          { key:'dauer', label:'Dauer', layout:'chips', multiple:true, options:['Impulse & Pitch-Formate (1–2 Stunden)','Halbtags-Workshops (3–4 Stunden)','Tages-Inkubator / Sprint'] },
+          { key:'haeufigkeit', label:'Häufigkeit', layout:'chips', multiple:true, options:['Einmalig / Nach Bedarf','Regelmäßig','Quartalsweise'] },
           { key:'format', label:'Welches Format bevorzugst du?', layout:'list', options:[
             { value:'Exklusiver Inhouse-Workshop / Firmenschulung', desc:'Individuelles Format direkt bei dir im Unternehmen' },
             { value:'B2B-Netzwerk- & Matchmaking-Events', desc:'Kontakte zu passenden Partnern und Unternehmen knüpfen' },
@@ -627,11 +651,26 @@
     ]
   };
 
-  let state = { stage:'intro', role:null, path:null, step:0, answers:{} };
+  /* Bonus-Angaben nach dem Hauptfragebogen — optimiert auf kurze, kategorisierte
+     Antworten statt Freitext, damit die Daten direkt auswertbar sind. */
+  const BONUS_GROUPS = [
+    { key:'alter', label:'Alter', layout:'chips', multiple:false,
+      options:['unter 18','18–24','25–34','35–44','45–54','55+'] },
+    { key:'beruf', label:'Beruflicher Hintergrund', layout:'chips', multiple:false,
+      options:['Schüler:in / Student:in','Angestellte:r','Selbstständig / Freiberuflich','Unternehmer:in','Sonstiges'] },
+    { key:'geschlecht', label:'Geschlecht', layout:'chips', multiple:false,
+      options:['Weiblich','Männlich','Divers','Keine Angabe'] },
+    { key:'interessen', label:'Interessen', layout:'chips', multiple:true,
+      options:['Technologie & Programmierung','Design & Kreativität','Handwerk & Prototyping','Business & Gründung','Nachhaltigkeit','Sonstiges'] },
+    { key:'quelle', label:'Wie hast du von uns erfahren?', layout:'chips', multiple:false,
+      options:['Social Media','Empfehlung','Suchmaschine','Veranstaltung / Messe','Presse / Blog','Sonstiges'] },
+  ];
+
+  let state = { stage:'intro', role:null, path:null, step:0, answers:{}, bonus:{}, feedback:'' };
 
   function setRole(roleId){
     const role = ROLES.find(r => r.id === roleId);
-    state = { stage:'form', role:roleId, path:role.path, step:0, answers:{} };
+    state = { stage:'form', role:roleId, path:role.path, step:0, answers:{}, bonus:{}, feedback:'' };
     const a = ACCENTS[role.accent];
     document.documentElement.style.setProperty('--accent', a.base);
     document.documentElement.style.setProperty('--accent-dark', a.dark);
@@ -685,13 +724,22 @@
     updateNextButton(q);
   }
 
-  function handleGroupClick(fullKey, btnEl){
+  function handleGroupClick(store, fullKey, btnEl, group, containerSelectorEl){
     const value = btnEl.dataset.value;
-    const arr = state.answers[fullKey] || (state.answers[fullKey] = []);
+    const arr = store[fullKey] || (store[fullKey] = []);
     const i = arr.indexOf(value);
     const nowSelected = i === -1;
-    if(nowSelected) arr.push(value); else arr.splice(i,1);
-    btnEl.classList.toggle('selected', nowSelected);
+    if(group.multiple === false){
+      // single-select chip group: clear siblings first
+      arr.length = 0;
+      if(containerSelectorEl){
+        containerSelectorEl.querySelectorAll('[data-group="'+fullKey+'"]').forEach(el => el.classList.remove('selected'));
+      }
+      if(nowSelected){ arr.push(value); btnEl.classList.add('selected'); }
+    } else {
+      if(nowSelected) arr.push(value); else arr.splice(i,1);
+      btnEl.classList.toggle('selected', nowSelected);
+    }
   }
 
   function setTextAnswer(qid, text){
@@ -702,58 +750,38 @@
     const qs = QUESTIONS[state.path];
     if(state.step < qs.length - 1){
       state.step++;
+      render();
     } else {
-      state.stage = 'summary';
+      state.stage = 'success';
+      render();
     }
-    render();
   }
 
   function back(){
-    if(state.step > 0){ state.step--; }
-    else { state = { stage:'intro', role:null, path:null, step:0, answers:{} }; }
-    render();
+    if(state.step > 0){ state.step--; render(); }
+    else { state = { stage:'intro', role:null, path:null, step:0, answers:{}, bonus:{}, feedback:'' }; render(); }
   }
 
   function restart(){
-    state = { stage:'intro', role:null, path:null, step:0, answers:{} };
+    state = { stage:'intro', role:null, path:null, step:0, answers:{}, bonus:{}, feedback:'' };
     render();
   }
 
+  function goBonus(){ state.stage = 'bonus'; render(); }
+  function skipBonus(){ state.stage = 'recommend'; render(); }
+  function bonusNext(){ state.stage = 'recommend'; render(); }
+  function bonusBack(){ state.stage = 'success'; render(); }
+  function recommendBack(){ state.stage = 'success'; render(); }
+  function chooseRecommend(value){
+    state.recommend = value;
+    state.stage = value === 'ja' ? 'thanks-google' : 'feedback';
+    render();
+  }
+  function feedbackBack(){ state.stage = 'recommend'; render(); }
+  function submitFeedback(){ state.stage = 'thanks-feedback'; render(); }
+
   function escapeHtml(str){
     return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  }
-
-  /* Build one or more {label, value} rows per question, for summary + copy */
-  function buildRows(q){
-    const rows = [];
-    if(q.kind === 'single'){
-      rows.push({ label:q.eyebrow, value: state.answers[q.id] || '—' });
-    } else if(q.kind === 'multi'){
-      const arr = state.answers[q.id] || [];
-      let value = arr.length ? arr.join(', ') : '—';
-      const otherText = state.answers[q.id + '__other'];
-      if(arr.includes('Sonstiges') && otherText){ value = value.replace('Sonstiges', 'Sonstiges (' + otherText + ')'); }
-      rows.push({ label:q.eyebrow, value });
-    } else if(q.kind === 'groups'){
-      q.groups.forEach(g => {
-        const arr = state.answers[q.id + '__' + g.key] || [];
-        rows.push({ label:g.label, value: arr.length ? arr.join(', ') : '—' });
-      });
-    } else if(q.kind === 'text'){
-      rows.push({ label:q.eyebrow, value: (state.answers[q.id] || '').trim() || '—' });
-    }
-    return rows;
-  }
-
-  function copySummary(){
-    const qs = QUESTIONS[state.path];
-    const lines = qs.flatMap(buildRows).map(r => r.label + ': ' + r.value);
-    const roleTitle = ROLES.find(r => r.id === state.role).title;
-    const text = 'Makerport Bedarfsanalyse — ' + roleTitle + '\n' + lines.join('\n');
-    navigator.clipboard.writeText(text).then(()=>{
-      const note = document.getElementById('copy-note');
-      if(note){ note.style.opacity = 1; setTimeout(()=>{ note.style.opacity = 0; }, 2200); }
-    });
   }
 
   function renderTopbar(){
@@ -823,18 +851,18 @@
     `;
   }
 
-  function renderGroupsStep(q){
-    const blocks = q.groups.map(g => {
-      const fullKey = q.id + '__' + g.key;
+  function renderGroupsBlock(groups, store, keyPrefix){
+    return groups.map(g => {
+      const fullKey = keyPrefix + g.key;
       if(g.layout === 'chips'){
         const chips = g.options.map(opt => {
-          const selected = (state.answers[fullKey] || []).includes(opt);
+          const selected = (store[fullKey] || []).includes(opt);
           return `<button class="chip${selected?' selected':''}" data-group="${fullKey}" data-value="${escapeHtml(opt)}">${escapeHtml(opt)}</button>`;
         }).join('');
         return `<div class="group-block"><div class="group-label">${g.label}</div><div class="chip-row">${chips}</div></div>`;
       } else {
         const items = g.options.map(opt => {
-          const selected = (state.answers[fullKey] || []).includes(opt.value);
+          const selected = (store[fullKey] || []).includes(opt.value);
           return `<button class="option${selected?' selected':''}" data-group="${fullKey}" data-value="${escapeHtml(opt.value)}">
             <span class="check"></span>
             <span class="option-main"><span>${escapeHtml(opt.value)}</span><span class="option-desc">${escapeHtml(opt.desc)}</span></span>
@@ -843,7 +871,6 @@
         return `<div class="group-block"><div class="group-label">${g.label}</div><div class="options">${items}</div></div>`;
       }
     }).join('');
-    return blocks;
   }
 
   function renderQuestion(){
@@ -858,7 +885,7 @@
     } else if(q.kind === 'multi'){
       body = `<div class="options">${q.options.map(o => renderSingleOrMultiOption(q, o, true)).join('')}</div>`;
     } else if(q.kind === 'groups'){
-      body = renderGroupsStep(q);
+      body = renderGroupsBlock(q.groups, state.answers, q.id + '__');
     } else if(q.kind === 'text'){
       const val = state.answers[q.id] || '';
       body = `<textarea class="textarea" id="text-answer" placeholder="${escapeHtml(q.placeholder||'')}">${escapeHtml(val)}</textarea>`;
@@ -867,61 +894,134 @@
     return `
       ${renderTopbar()}
       ${renderRail()}
-      <div class="q-card">
+      <div class="panel-card">
         <div class="q-eyebrow">${q.eyebrow}</div>
         <div class="q-title">${q.question}</div>
         ${q.hint ? `<div class="q-hint">${q.hint}</div>` : `<div class="q-hint">&nbsp;</div>`}
         ${body}
         <div class="nav">
           <button class="btn btn-back" id="back-btn">Zurück</button>
-          <button class="btn btn-next" id="next-btn" ${complete ? '' : 'disabled'}>${isLast ? 'Zur Übersicht' : 'Weiter'}</button>
+          <button class="btn btn-next" id="next-btn" ${complete ? '' : 'disabled'}>${isLast ? 'Absenden' : 'Weiter'}</button>
         </div>
       </div>
       <div class="sheet-index">Schritt ${state.step+1} von ${qs.length}</div>
     `;
   }
 
-  function renderSummary(){
-    const qs = QUESTIONS[state.path];
-    const rows = qs.flatMap(buildRows).map(r => `
-      <div class="summary-row">
-        <div class="summary-label">${escapeHtml(r.label)}</div>
-        <div class="summary-value">${escapeHtml(r.value)}</div>
-      </div>
-    `).join('');
+  function renderSuccess(){
     return `
       ${renderTopbar()}
-      <div class="summary-card">
-        <div class="summary-head">Danke — hier deine Angaben.</div>
-        <div class="summary-sub">Wir nutzen das, um dir passende Formate im Makerport vorzuschlagen.</div>
-        <div class="summary-list">${rows}</div>
-        <div class="summary-actions">
-          <button class="link-btn primary" id="copy-btn">Antworten kopieren</button>
-          <button class="link-btn" id="restart-btn">Neu starten</button>
-          <span class="copy-note" id="copy-note" style="opacity:0;transition:opacity .2s;">Kopiert</span>
+      <div class="panel-card">
+        <div class="panel-head">Danke für deine Teilnahme!</div>
+        <p class="panel-sub">Deine Angaben helfen uns, das Makerport noch passender für dich zu gestalten.</p>
+        <hr class="panel-divider" />
+        <div class="upsell-title">Wir würden gerne noch mehr von dir erfahren</div>
+        <p class="panel-sub">Mit ein paar zusätzlichen Angaben können wir dir noch gezieltere Formate vorschlagen — dauert nur eine Minute.</p>
+        <div class="cta-row">
+          <button class="btn-cta" id="bonus-btn">Angaben ergänzen</button>
+          <button class="skip-link" id="skip-btn">Überspringen</button>
         </div>
+      </div>
+    `;
+  }
+
+  function renderBonus(){
+    const body = renderGroupsBlock(BONUS_GROUPS, state.bonus, '');
+    return `
+      ${renderTopbar()}
+      <div class="panel-card">
+        <div class="q-eyebrow">Noch ein paar Angaben zu dir</div>
+        <div class="q-title">Erzähl uns kurz mehr über dich</div>
+        <div class="q-hint">Alle Angaben sind freiwillig</div>
+        ${body}
+        <div class="nav">
+          <button class="btn btn-back" id="back-btn">Zurück</button>
+          <button class="btn btn-next" id="next-btn">Weiter</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderRecommend(){
+    return `
+      ${renderTopbar()}
+      <div class="panel-card">
+        <div class="q-eyebrow">Letzte Frage</div>
+        <div class="q-title">Würdest du das Makerport weiterempfehlen?</div>
+        <div class="q-hint">&nbsp;</div>
+        <div class="choice-row">
+          <button class="choice-btn" data-value="ja">Ja</button>
+          <button class="choice-btn" data-value="nein">Nein</button>
+        </div>
+        <div class="nav">
+          <button class="btn btn-back" id="back-btn">Zurück</button>
+          <span></span>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderFeedback(){
+    return `
+      ${renderTopbar()}
+      <div class="panel-card">
+        <div class="q-eyebrow">Dein Feedback</div>
+        <div class="q-title">Wie können wir das Makerport für dich verbessern?</div>
+        <div class="q-hint">&nbsp;</div>
+        <textarea class="textarea" id="feedback-answer" placeholder="Erzähl uns, was wir besser machen können …">${escapeHtml(state.feedback||'')}</textarea>
+        <div class="nav">
+          <button class="btn btn-back" id="back-btn">Zurück</button>
+          <button class="btn btn-next" id="next-btn">Absenden</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderThanksFeedback(){
+    return `
+      ${renderTopbar()}
+      <div class="panel-card">
+        <div class="panel-head">Danke für dein Feedback!</div>
+        <p class="panel-sub">Wir nehmen jede Rückmeldung ernst und nutzen sie, um das Makerport laufend für dich weiterzuentwickeln.</p>
+        <button class="restart-link" id="restart-btn">Neuen Fragebogen starten</button>
+      </div>
+    `;
+  }
+
+  function renderThanksGoogle(){
+    return `
+      ${renderTopbar()}
+      <div class="panel-card">
+        <div class="panel-head">Danke für deine Teilnahme!</div>
+        <p class="panel-sub">Es freut uns total, dass dir das Makerport gefällt. Mit einer kurzen Google-Bewertung hilfst du uns, noch mehr Menschen wie dich zu erreichen.</p>
+        <div class="cta-row">
+          <a class="btn-cta" href="${GOOGLE_REVIEW_URL}" target="_blank" rel="noopener">Auf Google bewerten</a>
+        </div>
+        <button class="restart-link" id="restart-btn">Neuen Fragebogen starten</button>
       </div>
     `;
   }
 
   function render(){
     const app = document.getElementById('app');
+
     if(state.stage === 'intro'){
       app.innerHTML = renderIntro();
       app.querySelectorAll('.path-card').forEach(el => {
         el.addEventListener('click', () => setRole(el.dataset.role));
       });
+
     } else if(state.stage === 'form'){
       app.innerHTML = renderQuestion();
       const q = QUESTIONS[state.path][state.step];
 
       if(q.kind === 'single'){
-        const container = app.querySelector('.q-card > .options');
+        const container = app.querySelector('.panel-card > .options');
         container.querySelectorAll('.option').forEach(el => {
           el.addEventListener('click', () => handleSingleClick(q, el, container));
         });
       } else if(q.kind === 'multi'){
-        app.querySelectorAll('.q-card > .options > .option').forEach(el => {
+        app.querySelectorAll('.panel-card > .options > .option').forEach(el => {
           el.addEventListener('click', (e) => {
             if(e.target.closest('.other-input')) return;
             handleMultiClick(q, el);
@@ -933,8 +1033,12 @@
           otherInput.addEventListener('click', (e) => e.stopPropagation());
         }
       } else if(q.kind === 'groups'){
-        app.querySelectorAll('.chip, .group-block .options .option').forEach(el => {
-          el.addEventListener('click', () => handleGroupClick(el.dataset.group, el));
+        const panel = app.querySelector('.panel-card');
+        q.groups.forEach(g => {
+          const fullKey = q.id + '__' + g.key;
+          panel.querySelectorAll('[data-group="'+fullKey+'"]').forEach(el => {
+            el.addEventListener('click', () => handleGroupClick(state.answers, fullKey, el, g, panel));
+          });
         });
       } else if(q.kind === 'text'){
         const ta = document.getElementById('text-answer');
@@ -943,9 +1047,43 @@
 
       document.getElementById('back-btn').addEventListener('click', back);
       document.getElementById('next-btn').addEventListener('click', next);
-    } else if(state.stage === 'summary'){
-      app.innerHTML = renderSummary();
-      document.getElementById('copy-btn').addEventListener('click', copySummary);
+
+    } else if(state.stage === 'success'){
+      app.innerHTML = renderSuccess();
+      document.getElementById('bonus-btn').addEventListener('click', goBonus);
+      document.getElementById('skip-btn').addEventListener('click', skipBonus);
+
+    } else if(state.stage === 'bonus'){
+      app.innerHTML = renderBonus();
+      const panel = app.querySelector('.panel-card');
+      BONUS_GROUPS.forEach(g => {
+        panel.querySelectorAll('[data-group="'+g.key+'"]').forEach(el => {
+          el.addEventListener('click', () => handleGroupClick(state.bonus, g.key, el, g, panel));
+        });
+      });
+      document.getElementById('back-btn').addEventListener('click', bonusBack);
+      document.getElementById('next-btn').addEventListener('click', bonusNext);
+
+    } else if(state.stage === 'recommend'){
+      app.innerHTML = renderRecommend();
+      app.querySelectorAll('.choice-btn').forEach(el => {
+        el.addEventListener('click', () => chooseRecommend(el.dataset.value));
+      });
+      document.getElementById('back-btn').addEventListener('click', recommendBack);
+
+    } else if(state.stage === 'feedback'){
+      app.innerHTML = renderFeedback();
+      const ta = document.getElementById('feedback-answer');
+      if(ta) ta.addEventListener('input', (e) => { state.feedback = e.target.value; });
+      document.getElementById('back-btn').addEventListener('click', feedbackBack);
+      document.getElementById('next-btn').addEventListener('click', submitFeedback);
+
+    } else if(state.stage === 'thanks-feedback'){
+      app.innerHTML = renderThanksFeedback();
+      document.getElementById('restart-btn').addEventListener('click', restart);
+
+    } else if(state.stage === 'thanks-google'){
+      app.innerHTML = renderThanksGoogle();
       document.getElementById('restart-btn').addEventListener('click', restart);
     }
   }
