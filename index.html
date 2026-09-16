@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Makerport — Bedarfsanalyse</title>
+<title>MakerPort — Bedarfsanalyse</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -557,11 +557,11 @@
 
   const ROLES = [
     { id:'privat', badge:'P', title:'Privatpersonen', path:'privat', accent:'orange',
-      desc:'Du willst im Makerport auf eigene Faust lernen, eine Idee umsetzen oder dich vernetzen.' },
+      desc:'Du willst im MakerPort auf eigene Faust lernen, eine Idee umsetzen oder dich vernetzen.' },
     { id:'fachkraft', badge:'F', title:'Angestellte & Fachkräfte', path:'fachkraft', accent:'indigo',
       desc:'Du bringst berufliche Erfahrung mit und willst neue Methoden oder Skills für deinen Job aufbauen.' },
     { id:'unternehmen', badge:'U', title:'Unternehmen & Selbstständige', path:'b2b', accent:'teal',
-      desc:'Du willst mit Makerport eine geschäftliche Herausforderung angehen — von neuen Technologien bis Talentgewinnung.' },
+      desc:'Du willst mit MakerPort eine geschäftliche Herausforderung angehen — von neuen Technologien bis Talentgewinnung.' },
   ];
   const ACCENTS = {
     orange:{ base:'var(--orange)', dark:'var(--orange-dark)', soft:'#FFF1EC' },
@@ -608,7 +608,7 @@
           { key:'haeufigkeit', label:'Häufigkeit', layout:'chips', multiple:true, options:['Spontan','Wöchentlich','Monatlich'] },
           { key:'format', label:'Welches Format bevorzugst du?', layout:'list', options:[
             { value:'Offene Werkstatt', desc:'Flexibel vorbeikommen, Geräte nutzen & eigene Projekte umsetzen' },
-            { value:'Vor-Ort-Workshop', desc:'Gemeinsam im Makerport lernen & ausprobieren' },
+            { value:'Vor-Ort-Workshop', desc:'Gemeinsam im MakerPort lernen & ausprobieren' },
             { value:'Webinar / Online', desc:'Bequem von zu Hause aus teilnehmen' },
             { value:'Meetup & Netzwerk', desc:'Lockerer Austausch bei Kaffee oder Feierabendbier' },
           ] },
@@ -653,7 +653,7 @@
           { key:'haeufigkeit', label:'Häufigkeit', layout:'chips', multiple:true, options:['Einmalig / Nach Bedarf','Monatlich','Quartalsweise'] },
           { key:'format', label:'Welches Format bevorzugst du?', layout:'list', options:[
             { value:'Offene Werkstatt', desc:'Flexibel vorbeikommen, Geräte nutzen & eigene Projekte umsetzen' },
-            { value:'Vor-Ort-Workshop', desc:'Gemeinsam im Makerport lernen & ausprobieren' },
+            { value:'Vor-Ort-Workshop', desc:'Gemeinsam im MakerPort lernen & ausprobieren' },
             { value:'Webinar / Online', desc:'Bequem von zu Hause aus teilnehmen' },
             { value:'Meetup & Netzwerk', desc:'Lockerer Austausch bei Kaffee oder Feierabendbier' },
           ] },
@@ -711,11 +711,12 @@
   };
 
   /* Bonus-Angaben nach dem Hauptfragebogen — optimiert auf kurze, kategorisierte
-     Antworten statt Freitext, damit die Daten direkt auswertbar sind. */
-  const BONUS_GROUPS = [
+     Antworten statt Freitext, damit die Daten direkt auswertbar sind.
+     Alle drei Rollen bekommen ein eigenes, passendes Set. */
+  const BONUS_GROUPS_PRIVAT = [
     { key:'alter', label:'Alter', layout:'chips', multiple:false,
       options:['unter 18','18–24','25–34','35–44','45–54','55+'] },
-    { key:'beruf', label:'Beruflicher Hintergrund', layout:'chips', multiple:false,
+    { key:'beruf', label:'Beruflicher Hintergrund', layout:'chips', multiple:true,
       options:['Schüler:in / Student:in','Angestellte:r','Selbstständig / Freiberuflich','Unternehmer:in','Sonstiges'] },
     { key:'geschlecht', label:'Geschlecht', layout:'chips', multiple:false,
       options:['Weiblich','Männlich','Divers','Keine Angabe'] },
@@ -724,6 +725,38 @@
     { key:'quelle', label:'Wie hast du von uns erfahren?', layout:'chips', multiple:false,
       options:['Social Media','Empfehlung','Suchmaschine','Veranstaltung / Messe','Presse / Blog','Sonstiges'] },
   ];
+
+  const BONUS_GROUPS_FACHKRAFT = [
+    { key:'alter', label:'Alter', layout:'chips', multiple:false,
+      options:['unter 18','18–24','25–34','35–44','45–54','55+'] },
+    { key:'position', label:'Position', layout:'chips', multiple:false,
+      options:['Berufseinsteiger:in / Azubi','Fachkraft / Spezialist:in','Teamleitung','(Abteilungs-)Leitung','Geschäftsführung','Sonstiges'] },
+    { key:'branche', label:'Branche', layout:'chips', multiple:false,
+      options:['Industrie / Produktion','IT / Software','Handel','Dienstleistung','Verwaltung','Tourismus','Landwirtschaft','Handwerk','Sonstiges'] },
+    { key:'geschlecht', label:'Geschlecht', layout:'chips', multiple:false,
+      options:['Weiblich','Männlich','Divers','Keine Angabe'] },
+    { key:'interessen', label:'Interessen', layout:'chips', multiple:true,
+      options:['Technologie & Programmierung','Design & Kreativität','Handwerk & Prototyping','Business & Gründung','Nachhaltigkeit','Sonstiges'] },
+    { key:'quelle', label:'Wie hast du von uns erfahren?', layout:'chips', multiple:false,
+      options:['Social Media','Empfehlung','Suchmaschine','Veranstaltung / Messe','Presse / Blog','Sonstiges'] },
+  ];
+
+  const BONUS_GROUPS_BUSINESS = [
+    { key:'unternehmensgroesse', label:'Unternehmensgröße', layout:'chips', multiple:false,
+      options:['1–9 Mitarbeitende','10–49 Mitarbeitende','50–249 Mitarbeitende','250+ Mitarbeitende'] },
+    { key:'branche', label:'Branche', layout:'chips', multiple:false,
+      options:['Industrie / Produktion','IT / Software','Handel','Dienstleistung','Verwaltung','Tourismus','Landwirtschaft','Handwerk','Sonstiges'] },
+    { key:'position', label:'Deine Position im Unternehmen', layout:'chips', multiple:false,
+      options:['Geschäftsführung','Innovationsmanagement','Personalabteilung','Sonstiges'] },
+    { key:'quelle', label:'Wie hast du von uns erfahren?', layout:'chips', multiple:false,
+      options:['Social Media','Empfehlung','Suchmaschine','Veranstaltung / Messe','Presse / Blog','Sonstiges'] },
+  ];
+
+  function bonusGroupsFor(path){
+    if(path === 'b2b') return BONUS_GROUPS_BUSINESS;
+    if(path === 'fachkraft') return BONUS_GROUPS_FACHKRAFT;
+    return BONUS_GROUPS_PRIVAT;
+  }
 
   let state = { stage:'intro', role:null, path:null, step:0, answers:{}, bonus:{}, feedback:'' };
 
@@ -862,7 +895,7 @@
 
   function renderTopbar(){
     return `<div class="topbar">
-      <div class="wordmark">Maker<span>port</span></div>
+      <div class="wordmark">Maker<span>Port</span></div>
       <div class="kicker">Bedarfsanalyse</div>
     </div>`;
   }
@@ -992,7 +1025,7 @@
       ${renderTopbar()}
       <div class="panel-card">
         <div class="panel-head">Danke für deine Teilnahme!</div>
-        <p class="panel-sub">Deine Angaben helfen uns, das Makerport noch passender für dich zu gestalten.</p>
+        <p class="panel-sub">Deine Angaben helfen uns, den MakerPort noch passender für dich zu gestalten.</p>
         <hr class="panel-divider" />
         <div class="upsell-title">Wir würden gerne noch mehr von dir erfahren</div>
         <p class="panel-sub">Mit ein paar zusätzlichen Angaben können wir dir noch gezieltere Formate vorschlagen — dauert nur eine Minute.</p>
@@ -1005,7 +1038,8 @@
   }
 
   function renderBonus(){
-    const body = renderGroupsBlock(BONUS_GROUPS, state.bonus, '');
+    const groups = bonusGroupsFor(state.path);
+    const body = renderGroupsBlock(groups, state.bonus, '');
     return `
       ${renderTopbar()}
       <div class="panel-card">
@@ -1026,7 +1060,7 @@
       ${renderTopbar()}
       <div class="panel-card">
         <div class="q-eyebrow">Letzte Frage</div>
-        <div class="q-title">Würdest du das Makerport weiterempfehlen?</div>
+        <div class="q-title">Würdest du den MakerPort weiterempfehlen?</div>
         <div class="q-hint">&nbsp;</div>
         <div class="choice-row">
           <button class="choice-btn" data-value="ja">Ja</button>
@@ -1045,7 +1079,7 @@
       ${renderTopbar()}
       <div class="panel-card">
         <div class="q-eyebrow">Dein Feedback</div>
-        <div class="q-title">Wie können wir das Makerport für dich verbessern?</div>
+        <div class="q-title">Wie können wir den MakerPort für dich verbessern?</div>
         <div class="q-hint">&nbsp;</div>
         <textarea class="textarea" id="feedback-answer" placeholder="Erzähl uns, was wir besser machen können …">${escapeHtml(state.feedback||'')}</textarea>
         <div class="nav">
@@ -1061,7 +1095,7 @@
       <div class="newsletter-block">
         <button class="check-row" id="newsletter-toggle-btn" type="button">
           <span class="check"></span>
-          <span>Ich möchte den Makerport-Newsletter erhalten</span>
+          <span>Ich möchte den MakerPort-Newsletter erhalten</span>
         </button>
         <div class="newsletter-form" id="newsletter-form" hidden>
           <input type="email" class="newsletter-email" id="newsletter-email" placeholder="deine@email.de" />
@@ -1077,7 +1111,7 @@
       ${renderTopbar()}
       <div class="panel-card">
         <div class="panel-head">Danke für dein Feedback!</div>
-        <p class="panel-sub">Wir nehmen jede Rückmeldung ernst und nutzen sie, um das Makerport laufend für dich weiterzuentwickeln.</p>
+        <p class="panel-sub">Wir nehmen jede Rückmeldung ernst und nutzen sie, um den MakerPort laufend für dich weiterzuentwickeln.</p>
         ${renderNewsletterBlock()}
       </div>
     `;
@@ -1088,7 +1122,7 @@
       ${renderTopbar()}
       <div class="panel-card">
         <div class="panel-head">Danke für deine Teilnahme!</div>
-        <p class="panel-sub">Es freut uns total, dass dir das Makerport gefällt. Mit einer kurzen Google-Bewertung hilfst du uns, noch mehr Menschen wie dich zu erreichen.</p>
+        <p class="panel-sub">Es freut uns total, dass dir der MakerPort gefällt. Mit einer kurzen Google-Bewertung hilfst du uns, noch mehr Menschen wie dich zu erreichen.</p>
         <div class="cta-row">
           <a class="btn-cta" href="${GOOGLE_REVIEW_URL}" target="_blank" rel="noopener">Auf Google bewerten</a>
         </div>
@@ -1154,7 +1188,7 @@
     } else if(state.stage === 'bonus'){
       app.innerHTML = renderBonus();
       const panel = app.querySelector('.panel-card');
-      BONUS_GROUPS.forEach(g => {
+      bonusGroupsFor(state.path).forEach(g => {
         panel.querySelectorAll('[data-group="'+g.key+'"]').forEach(el => {
           el.addEventListener('click', () => handleGroupClick(state.bonus, g.key, el, g, panel));
         });
