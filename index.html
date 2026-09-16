@@ -189,9 +189,17 @@
     font-size:0.72rem;
     color:var(--line);
     font-weight:500;
+    background:none;
+    border:none;
+    padding:0;
+    font-family:inherit;
+    cursor:default;
   }
   .rail-tick.done{ color:var(--muted); }
   .rail-tick.active{ color:var(--accent); font-weight:700; }
+  .rail-tick.clickable{ cursor:pointer; }
+  .rail-tick.clickable:hover{ text-decoration:underline; }
+  .rail-tick.clickable:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
 
   /* ---------- Card shell (question / success / bonus / recommend / feedback / thanks) ---------- */
   .panel-card{
@@ -485,6 +493,57 @@
     display:inline-block;
   }
   .restart-link:hover{ color:var(--ink); }
+
+  /* ---------- Newsletter opt-in (on thank-you screens) ---------- */
+  .newsletter-block{ margin-top:28px; padding-top:24px; border-top:1px solid var(--line); }
+  .check-row{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    cursor:pointer;
+    background:none;
+    border:none;
+    padding:0;
+    font-family:inherit;
+    font-size:0.92rem;
+    color:var(--ink);
+    text-align:left;
+  }
+  .check-row.selected .check{ border-color:var(--accent); background:var(--accent); }
+  .check-row.selected .check::after{
+    content:"";
+    position:absolute;
+    left:5px; top:1px;
+    width:4px; height:9px;
+    border:solid #fff;
+    border-width:0 2px 2px 0;
+    transform:rotate(45deg);
+  }
+  .newsletter-form{
+    display:flex;
+    gap:10px;
+    margin-top:16px;
+    flex-wrap:wrap;
+  }
+  .newsletter-form[hidden]{ display:none; }
+  .newsletter-email{
+    padding:10px 12px;
+    border:1.5px solid var(--line);
+    border-radius:6px;
+    font-family:inherit;
+    font-size:0.92rem;
+    color:var(--ink);
+    background:var(--card);
+    flex:1;
+    min-width:200px;
+  }
+  .newsletter-email:focus{ outline:none; border-color:var(--accent); }
+  .newsletter-success{
+    margin-top:14px;
+    font-size:0.9rem;
+    font-weight:600;
+    color:var(--teal);
+  }
 </style>
 </head>
 <body>
@@ -780,6 +839,23 @@
   function feedbackBack(){ state.stage = 'recommend'; render(); }
   function submitFeedback(){ state.stage = 'thanks-feedback'; render(); }
 
+  function toggleNewsletter(){
+    const btn = document.getElementById('newsletter-toggle-btn');
+    const form = document.getElementById('newsletter-form');
+    const success = document.getElementById('newsletter-success');
+    const nowOn = btn.classList.toggle('selected');
+    form.hidden = !nowOn;
+    if(!nowOn){ success.hidden = true; }
+  }
+
+  function submitNewsletter(){
+    const input = document.getElementById('newsletter-email');
+    const email = input.value.trim();
+    if(!email) { input.focus(); return; }
+    document.getElementById('newsletter-form').hidden = true;
+    document.getElementById('newsletter-success').hidden = false;
+  }
+
   function escapeHtml(str){
     return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   }
@@ -814,8 +890,11 @@
     const label = ROLES.find(r => r.id === state.role).title;
     const ticks = qs.map((q,i)=>{
       let cls = 'rail-tick';
-      if(i < state.step) cls += ' done';
-      if(i === state.step) cls += ' active';
+      if(i < state.step) cls += ' done clickable';
+      if(i === state.step) cls += ' active clickable';
+      if(i <= state.step){
+        return `<button type="button" class="${cls}" data-step="${i}">${q.tick}</button>`;
+      }
       return `<div class="${cls}">${q.tick}</div>`;
     }).join('');
     return `
@@ -977,13 +1056,29 @@
     `;
   }
 
+  function renderNewsletterBlock(){
+    return `
+      <div class="newsletter-block">
+        <button class="check-row" id="newsletter-toggle-btn" type="button">
+          <span class="check"></span>
+          <span>Ich möchte den Makerport-Newsletter erhalten</span>
+        </button>
+        <div class="newsletter-form" id="newsletter-form" hidden>
+          <input type="email" class="newsletter-email" id="newsletter-email" placeholder="deine@email.de" />
+          <button class="btn-cta" id="newsletter-submit" type="button">Anmelden</button>
+        </div>
+        <div class="newsletter-success" id="newsletter-success" hidden>Danke! Du bist angemeldet.</div>
+      </div>
+    `;
+  }
+
   function renderThanksFeedback(){
     return `
       ${renderTopbar()}
       <div class="panel-card">
         <div class="panel-head">Danke für dein Feedback!</div>
         <p class="panel-sub">Wir nehmen jede Rückmeldung ernst und nutzen sie, um das Makerport laufend für dich weiterzuentwickeln.</p>
-        <button class="restart-link" id="restart-btn">Neuen Fragebogen starten</button>
+        ${renderNewsletterBlock()}
       </div>
     `;
   }
@@ -997,7 +1092,7 @@
         <div class="cta-row">
           <a class="btn-cta" href="${GOOGLE_REVIEW_URL}" target="_blank" rel="noopener">Auf Google bewerten</a>
         </div>
-        <button class="restart-link" id="restart-btn">Neuen Fragebogen starten</button>
+        ${renderNewsletterBlock()}
       </div>
     `;
   }
@@ -1047,6 +1142,9 @@
 
       document.getElementById('back-btn').addEventListener('click', back);
       document.getElementById('next-btn').addEventListener('click', next);
+      app.querySelectorAll('.rail-tick.clickable').forEach(el => {
+        el.addEventListener('click', () => { state.step = parseInt(el.dataset.step, 10); render(); });
+      });
 
     } else if(state.stage === 'success'){
       app.innerHTML = renderSuccess();
@@ -1080,11 +1178,13 @@
 
     } else if(state.stage === 'thanks-feedback'){
       app.innerHTML = renderThanksFeedback();
-      document.getElementById('restart-btn').addEventListener('click', restart);
+      document.getElementById('newsletter-toggle-btn').addEventListener('click', toggleNewsletter);
+      document.getElementById('newsletter-submit').addEventListener('click', submitNewsletter);
 
     } else if(state.stage === 'thanks-google'){
       app.innerHTML = renderThanksGoogle();
-      document.getElementById('restart-btn').addEventListener('click', restart);
+      document.getElementById('newsletter-toggle-btn').addEventListener('click', toggleNewsletter);
+      document.getElementById('newsletter-submit').addEventListener('click', submitNewsletter);
     }
   }
 
