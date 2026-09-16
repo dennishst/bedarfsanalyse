@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Makerport — Bedarfsanalyse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#33475B;        /* HubSpot navy (body/headline text) */
+    --paper:#F5F8FA;       /* HubSpot canvas gray */
+    --card:#FFFFFF;
+    --line:#CBD6E2;        /* HubSpot border gray */
+    --muted:#516F90;       /* HubSpot muted text */
+    --orange:#FF7A59;      /* HubSpot primary CTA orange */
+    --orange-dark:#E66E50;
+    --teal:#00A4BD;        /* HubSpot secondary teal */
+    --teal-dark:#00879C;
+    --indigo:#6A78D1;      /* HubSpot secondary indigo */
+    --indigo-dark:#5563C0;
+    --accent: var(--orange);
+    --accent-dark: var(--orange-dark);
+    --accent-soft:#FFF1EC;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+
+  #app{
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding-bottom:20px;
+    margin-bottom:28px;
+  }
+  .wordmark{
+    font-family:'Lexend Deca', sans-serif;
+    font-size:1.05rem;
+    font-weight:600;
+    color:var(--ink);
+  }
+  .wordmark span{ color:var(--orange); }
+  .kicker{
+    font-size:0.8rem;
+    color:var(--muted);
+    font-weight:500;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:4px 12px;
+    white-space:nowrap;
+  }
+
+  /* ---------- Intro ---------- */
+  .hero-question{
+    font-family:'Lexend Deca', sans-serif;
+    font-size:2rem;
+    line-height:1.3;
+    font-weight:600;
+    max-width: 26ch;
+    margin:0 0 28px;
+    animation: fade-in 0.45s ease both;
+    letter-spacing:-0.01em;
+  }
+  @keyframes fade-in{
+    from{ opacity:0; }
+    to{ opacity:1; }
+  }
+  .paths{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:12px;
+  }
+  .path-card{
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:var(--card);
+    box-shadow: 0 1px 2px rgba(33,49,74,0.06);
+    padding:24px 18px;
+    cursor:pointer;
+    text-align:left;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    transition: box-shadow 0.15s ease, border-color 0.15s ease;
+    font-family:inherit;
+    color:inherit;
+    min-width:0;
+  }
+  .path-card:hover, .path-card:focus-visible{
+    box-shadow: 0 4px 12px rgba(33,49,74,0.10);
+    border-color: var(--role-accent);
+    outline:none;
+  }
+  .path-card:focus-visible{ box-shadow: 0 0 0 3px rgba(255,122,89,0.3); }
+  .path-icon{
+    width:34px; height:34px;
+    border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Lexend Deca', sans-serif;
+    font-weight:700;
+    font-size:0.9rem;
+    color:#fff;
+    background: var(--role-accent);
+    flex:none;
+  }
+  .path-title{
+    font-family:'Lexend Deca', sans-serif;
+    font-size:1.05rem;
+    font-weight:600;
+    line-height:1.3;
+  }
+  .path-desc{
+    font-size:0.85rem;
+    color:var(--muted);
+    line-height:1.5;
+  }
+  .path-cta{
+    font-family:'Lexend Deca', sans-serif;
+    font-size:0.8rem;
+    font-weight:600;
+    margin-top:auto;
+    padding-top:6px;
+    color: var(--role-accent);
+  }
+  @media (max-width:700px){
+    .hero-question{ font-size:1.4rem; }
+    .path-card{ padding:16px 12px; gap:8px; }
+    .path-title{ font-size:0.88rem; }
+    .path-desc{ display:none; }
+    .path-cta{ font-size:0.72rem; }
+    .path-icon{ width:26px; height:26px; font-size:0.75rem; border-radius:6px; }
+    .paths{ gap:8px; }
+  }
+  @media (max-width:460px){
+    .path-title{ font-size:0.76rem; }
+    .path-card{ padding:12px 8px; }
+  }
+
+  /* ---------- Progress rail ---------- */
+  .rail-wrap{ margin-bottom:24px; }
+  .rail-meta{
+    display:flex;
+    justify-content:space-between;
+    font-size:0.8rem;
+    color:var(--muted);
+    margin-bottom:10px;
+    font-weight:500;
+  }
+  .rail-meta strong{ color:var(--ink); font-weight:600; }
+  .rail{
+    position:relative;
+    height:6px;
+    background:var(--line);
+    border-radius:999px;
+    overflow:hidden;
+  }
+  .rail-fill{
+    position:absolute;
+    top:0; left:0; height:100%;
+    background:var(--accent);
+    border-radius:999px;
+    transition: width 0.35s ease;
+  }
+  .rail-ticks{
+    display:flex;
+    justify-content:space-between;
+    margin-top:10px;
+  }
+  .rail-tick{
+    font-size:0.72rem;
+    color:var(--line);
+    font-weight:500;
+  }
+  .rail-tick.done{ color:var(--muted); }
+  .rail-tick.active{ color:var(--accent); font-weight:700; }
+
+  /* ---------- Question card ---------- */
+  .q-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:8px;
+    box-shadow: 0 1px 2px rgba(33,49,74,0.06);
+    padding:32px;
+    animation: fade-in 0.3s ease both;
+  }
+  @media (max-width:600px){ .q-card{ padding:20px; } }
+  .q-eyebrow{
+    font-family:'Lexend Deca', sans-serif;
+    font-size:0.78rem;
+    font-weight:600;
+    color:var(--accent);
+    margin-bottom:10px;
+  }
+  .q-title{
+    font-family:'Lexend Deca', sans-serif;
+    font-size:1.35rem;
+    line-height:1.4;
+    font-weight:600;
+    margin:0 0 6px;
+    color:var(--ink);
+  }
+  .q-hint{
+    font-size:0.85rem;
+    color:var(--muted);
+    margin:0 0 20px;
+  }
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .option{
+    display:flex;
+    align-items:flex-start;
+    gap:14px;
+    padding:14px 16px;
+    border:1.5px solid var(--line);
+    border-radius:6px;
+    cursor:pointer;
+    background:var(--card);
+    text-align:left;
+    font-family:inherit;
+    font-size:0.98rem;
+    color:var(--ink);
+    transition: background-color 0.12s ease, border-color 0.12s ease;
+    width:100%;
+  }
+  .option:hover{ border-color: var(--accent); background: var(--accent-soft); }
+  .option:focus-visible{ outline:none; box-shadow: 0 0 0 3px rgba(255,122,89,0.25); }
+  .option-main{ display:flex; flex-direction:column; gap:3px; }
+  .option-desc{ font-size:0.84rem; color:var(--muted); font-weight:400; line-height:1.4; }
+
+  .dot{
+    flex:none;
+    width:18px; height:18px;
+    margin-top:1px;
+    border-radius:50%;
+    border:2px solid var(--line);
+    position:relative;
+    transition: border-color 0.12s ease;
+  }
+  .option.selected .dot{ border-color:var(--accent); }
+  .option.selected .dot::after{
+    content:"";
+    position:absolute;
+    top:3px; left:3px; right:3px; bottom:3px;
+    border-radius:50%;
+    background:var(--accent);
+  }
+  .check{
+    flex:none;
+    width:18px; height:18px;
+    margin-top:1px;
+    border-radius:4px;
+    border:2px solid var(--line);
+    position:relative;
+    background:var(--card);
+    transition: border-color 0.12s ease, background-color 0.12s ease;
+  }
+  .option.selected .check{ border-color:var(--accent); background:var(--accent); }
+  .option.selected .check::after{
+    content:"";
+    position:absolute;
+    left:5px; top:1px;
+    width:4px; height:9px;
+    border:solid #fff;
+    border-width:0 2px 2px 0;
+    transform:rotate(45deg);
+  }
+  .option.selected{ border-color:var(--accent); background:var(--accent-soft); font-weight:600; }
+  .option.selected .option-desc{ font-weight:400; }
+
+  .other-input{
+    margin-top:10px;
+    margin-left:32px;
+    width:calc(100% - 32px);
+    padding:10px 12px;
+    border:1.5px solid var(--line);
+    border-radius:6px;
+    font-family:inherit;
+    font-size:0.92rem;
+    color:var(--ink);
+    background:var(--card);
+  }
+  .other-input:focus{ outline:none; border-color:var(--accent); }
+  @media (max-width:460px){ .other-input{ margin-left:0; width:100%; } }
+
+  /* ---------- Groups (Schritt 4) ---------- */
+  .group-block{ margin-bottom:26px; }
+  .group-block:last-child{ margin-bottom:0; }
+  .group-label{
+    font-family:'Lexend Deca', sans-serif;
+    font-size:0.85rem;
+    font-weight:600;
+    color:var(--ink);
+    margin-bottom:12px;
+  }
+  .chip-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .chip{
+    padding:9px 16px;
+    border:1.5px solid var(--line);
+    border-radius:999px;
+    background:var(--card);
+    font-family:inherit;
+    font-size:0.88rem;
+    color:var(--ink);
+    cursor:pointer;
+    transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+  }
+  .chip:hover{ border-color:var(--accent); }
+  .chip:focus-visible{ outline:none; box-shadow:0 0 0 3px rgba(255,122,89,0.25); }
+  .chip.selected{ background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600; }
+
+  /* ---------- Textarea (Schritt 5) ---------- */
+  .textarea{
+    width:100%;
+    min-height:120px;
+    padding:14px 16px;
+    border:1.5px solid var(--line);
+    border-radius:6px;
+    font-family:inherit;
+    font-size:0.98rem;
+    color:var(--ink);
+    resize:vertical;
+    background:var(--card);
+  }
+  .textarea:focus{ outline:none; border-color:var(--accent); }
+  .textarea::placeholder{ color:#93A6BA; }
+
+  /* ---------- Nav ---------- */
+  .nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:28px;
+  }
+  .btn{
+    font-family:'Lexend Deca', sans-serif;
+    font-size:0.9rem;
+    font-weight:600;
+    border:none;
+    cursor:pointer;
+    padding:11px 20px;
+    border-radius:4px;
+  }
+  .btn-back{ color:var(--muted); background:none; padding:11px 4px; }
+  .btn-back:hover{ color:var(--ink); }
+  .btn-next{
+    background:var(--accent);
+    color:#fff;
+    padding:11px 28px;
+    transition: background-color 0.12s ease;
+  }
+  .btn-next:disabled{
+    background:#CBD6E2;
+    color:#8FA3B8;
+    cursor:not-allowed;
+  }
+  .btn-next:not(:disabled):hover{ background:var(--accent-dark); }
+  .btn:focus-visible{ outline:2px solid var(--ink); outline-offset:2px; }
+
+  .sheet-index{
+    font-size:0.75rem;
+    color:var(--muted);
+    margin-top:20px;
+    text-align:right;
+  }
+
+  /* ---------- Summary ---------- */
+  .summary-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:8px;
+    box-shadow: 0 1px 2px rgba(33,49,74,0.06);
+    padding:32px;
+    animation: fade-in 0.3s ease both;
+  }
+  @media (max-width:600px){ .summary-card{ padding:22px; } }
+  .summary-head{
+    font-family:'Lexend Deca', sans-serif;
+    font-size:1.5rem;
+    font-weight:600;
+    margin:0 0 8px;
+    color:var(--ink);
+  }
+  .summary-sub{
+    color:var(--muted);
+    font-size:0.98rem;
+    margin-bottom:24px;
+  }
+  .summary-list{
+    border-top:1px solid var(--line);
+  }
+  .summary-row{
+    display:flex;
+    justify-content:space-between;
+    gap:24px;
+    padding:14px 2px;
+    border-bottom:1px solid var(--line);
+  }
+  .summary-label{
+    font-size:0.85rem;
+    color:var(--muted);
+    flex:none;
+    width:42%;
+    font-weight:500;
+  }
+  .summary-value{
+    font-weight:600;
+    text-align:right;
+    color:var(--ink);
+  }
+  .summary-actions{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-top:28px;
+    flex-wrap:wrap;
+  }
+  .link-btn{
+    font-family:'Lexend Deca', sans-serif;
+    font-size:0.88rem;
+    font-weight:600;
+    cursor:pointer;
+    border-radius:4px;
+    padding:10px 18px;
+    border:1.5px solid var(--line);
+    background:var(--card);
+    color:var(--ink);
+  }
+  .link-btn:hover{ border-color:var(--accent); color:var(--accent); }
+  .link-btn.primary{
+    background:var(--accent);
+    color:#fff;
+    border-color:var(--accent);
+  }
+  .link-btn.primary:hover{ background:var(--accent-dark); border-color:var(--accent-dark); color:#fff; }
+  .copy-note{
+    font-size:0.82rem;
+    font-weight:600;
+    color:var(--teal);
+    align-self:center;
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+(function(){
+
+  const ROLES = [
+    { id:'privat', badge:'P', title:'Privatpersonen', path:'privat', accent:'orange',
+      desc:'Du willst im Makerport auf eigene Faust lernen, eine Idee umsetzen oder dich vernetzen.' },
+    { id:'fachkraft', badge:'F', title:'Angestellte & Fachkräfte', path:'fachkraft', accent:'indigo',
+      desc:'Du bringst berufliche Erfahrung mit und willst neue Methoden oder Skills für deinen Job aufbauen.' },
+    { id:'unternehmen', badge:'U', title:'Unternehmen & Selbstständige', path:'b2b', accent:'teal',
+      desc:'Du willst mit Makerport eine geschäftliche Herausforderung angehen — von neuen Technologien bis Talentgewinnung.' },
+  ];
+  const ACCENTS = {
+    orange:{ base:'var(--orange)', dark:'var(--orange-dark)', soft:'#FFF1EC' },
+    indigo:{ base:'var(--indigo)', dark:'var(--indigo-dark)', soft:'#EEF0FC' },
+    teal:{ base:'var(--teal)', dark:'var(--teal-dark)', soft:'#E5F7FA' },
+  };
+
+  const QUESTIONS = {
+    privat: [
+      { id:'anliegen', kind:'multi', tick:'Anliegen', eyebrow:'Einstieg & Zielsetzung',
+        question:'Was beschreibt dein Anliegen am besten?', hint:'Mehrfachauswahl möglich',
+        options:[
+          { value:'Ich möchte eine eigene Idee / ein eigenes Projekt umsetzen.' },
+          { value:'Ich möchte moderne Technologien ausprobieren.' },
+          { value:'Ich möchte digitale Kenntnisse aufbauen oder festigen.' },
+          { value:'Ich möchte mich mit Gleichgesinnten austauschen und vernetzen.' },
+          { value:'Sonstiges', other:true },
+        ] },
+      { id:'wissensstand', kind:'single', tick:'Wissensstand', eyebrow:'Wissensstand & Vorerfahrung',
+        question:'Wie schätzt du deine Erfahrung im digitalen/technischen Bereich ein?',
+        options:[
+          { value:'Unerfahren', desc:'Ich habe wenig Vorkenntnisse und möchte Grundlagen lernen.' },
+          { value:'Fortgeschritten', desc:'Ich kenne mich mit Standard-Tools gut aus und möchte Neues entdecken.' },
+          { value:'Erfahren', desc:'Ich bringe konkretes Fachwissen mit und möchte mehr umsetzen.' },
+        ] },
+      { id:'themen', kind:'multi', tick:'Themen', eyebrow:'Konkreter Themenbedarf',
+        question:'Welche Themen oder Tools interessieren dich aktuell besonders?', hint:'Mehrfachauswahl möglich',
+        options:[
+          { value:'Maker-Equipment', desc:'3D-Drucker, Lasercutter, Werkstatt & Prototyping' },
+          { value:'Software & KI', desc:'Künstliche Intelligenz (ChatGPT & Co.), Programmierung, Automatisierung' },
+          { value:'Medien & Design', desc:'Bild-/Videobearbeitung, Webdesign, Content Creation' },
+          { value:'Gründung', desc:'Businessplan, Finanzierung, erste Schritte in die Selbstständigkeit' },
+          { value:'Marketing', desc:'Social Media, Branding, digitale Vermarktung eigener Ideen' },
+          { value:'Hardware & IoT', desc:'Sensorik, Arduino, Microcontroller, Smart Home' },
+          { value:'Sicherheit & Alltag', desc:'Datenschutz, Online-Sicherheit, Smartphone-/PC-Tricks' },
+          { value:'Ich bin noch unsicher und möchte mich überraschen lassen.' },
+        ] },
+      { id:'zeitbudget', kind:'groups', tick:'Zeit & Format', eyebrow:'Zeitbudget & Wunscheinbindung',
+        question:'Wann passt es dir am besten?', hint:'Mehrfachauswahl möglich',
+        groups:[
+          { key:'wochentage', label:'Wochentage', layout:'chips', options:['Mo','Di','Mi','Do','Fr','Sa','So'] },
+          { key:'tageszeit', label:'Tageszeit', layout:'chips', options:['Vormittags','Nachmittags','Abends'] },
+          { key:'dauer', label:'Dauer', layout:'chips', options:['ca. 1 Stunde','2–3 Stunden','Tages-Workshop'] },
+          { key:'haeufigkeit', label:'Häufigkeit', layout:'chips', options:['Spontan','Wöchentlich','Monatlich'] },
+          { key:'format', label:'Welches Format bevorzugst du?', layout:'list', options:[
+            { value:'Offene Werkstatt', desc:'Flexibel vorbeikommen, Geräte nutzen & eigene Projekte umsetzen' },
+            { value:'Vor-Ort-Workshop', desc:'Gemeinsam im Makerport lernen & ausprobieren' },
+            { value:'Webinar / Online', desc:'Bequem von zu Hause aus teilnehmen' },
+            { value:'Meetup & Netzwerk', desc:'Lockerer Austausch bei Kaffee oder Feierabendbier' },
+          ] },
+        ] },
+      { id:'abschluss', kind:'text', tick:'Abschluss', eyebrow:'Offener Abschluss (optional)',
+        question:'Gibt es ein bestimmtes Problem oder Projekt, bei dem wir dir direkt helfen können?',
+        placeholder:'Erzähl uns kurz davon … (optional)' },
+    ],
+    fachkraft: [
+      { id:'anliegen', kind:'multi', tick:'Anliegen', eyebrow:'Einstieg & Zielsetzung',
+        question:'Was beschreibt dein Anliegen am besten?', hint:'Mehrfachauswahl möglich',
+        options:[
+          { value:'Arbeitsabläufe vereinfachen & automatisieren' },
+          { value:'Neue Tools & Methoden für den Job erlernen' },
+          { value:'Konkretes Projekt / Prototyp für die Firma umsetzen' },
+          { value:'Netzwerken & Austausch mit anderen Fachkräften' },
+          { value:'Sonstiges', other:true },
+        ] },
+      { id:'wissensstand', kind:'single', tick:'Wissensstand', eyebrow:'Wissensstand & Vorerfahrung',
+        question:'Wie schätzt du deine Erfahrung im digitalen/technischen Bereich ein?',
+        options:[
+          { value:'Unerfahren', desc:'Ich suche erste Orientierung bei digitalen Trends & Tools.' },
+          { value:'Fortgeschritten', desc:'Ich nutze digitale Tools im Job und möchte meine Skills ausbauen.' },
+          { value:'Erfahren', desc:'Ich habe tiefes Fachwissen und suche Austausch oder Equipment.' },
+        ] },
+      { id:'themen', kind:'multi', tick:'Themen', eyebrow:'Konkreter Themenbedarf',
+        question:'Welche Themen oder Tools interessieren dich aktuell besonders?', hint:'Mehrfachauswahl möglich',
+        options:[
+          { value:'KI & Automatisierung', desc:'ChatGPT, Prompting, Prozess-Tools' },
+          { value:'Agile Methoden', desc:'Design Thinking, Scrum, New Work' },
+          { value:'Prototyping & Tech', desc:'3D-Druck, CAD, IoT, Hardware-Anwendungen' },
+          { value:'Daten & Software', desc:'Datenanalyse, IT-Sicherheit, Programmierung' },
+          { value:'Marketing & Content', desc:'Digitale Kommunikation, Social Media, Design' },
+          { value:'Noch unsicher / Offen für neue Trends' },
+        ] },
+      { id:'zeitbudget', kind:'groups', tick:'Zeit & Format', eyebrow:'Zeitbudget & Wunscheinbindung',
+        question:'Wann passt es dir am besten?', hint:'Mehrfachauswahl möglich',
+        groups:[
+          { key:'wochentage', label:'Wochentage', layout:'chips', options:['Mo','Di','Mi','Do','Fr','Sa','So'] },
+          { key:'tageszeit', label:'Tageszeit', layout:'chips', options:['Vormittags','Nachmittags','Abends'] },
+          { key:'dauer', label:'Dauer', layout:'chips', options:['ca. 1 Stunde','2–3 Stunden','Tages-Workshop'] },
+          { key:'haeufigkeit', label:'Häufigkeit', layout:'chips', options:['Einmalig / Nach Bedarf','Monatlich','Quartalsweise'] },
+          { key:'format', label:'Welches Format bevorzugst du?', layout:'list', options:[
+            { value:'Offene Werkstatt', desc:'Flexibel vorbeikommen, Geräte nutzen & eigene Projekte umsetzen' },
+            { value:'Vor-Ort-Workshop', desc:'Gemeinsam im Makerport lernen & ausprobieren' },
+            { value:'Webinar / Online', desc:'Bequem von zu Hause aus teilnehmen' },
+            { value:'Meetup & Netzwerk', desc:'Lockerer Austausch bei Kaffee oder Feierabendbier' },
+          ] },
+        ] },
+      { id:'abschluss', kind:'text', tick:'Abschluss', eyebrow:'Offener Abschluss (optional)',
+        question:'Welche konkrete Herausforderung in deinem Arbeitsalltag würdest du gerne lösen?',
+        placeholder:'Erzähl uns kurz davon … (optional)' },
+    ],
+    b2b: [
+      { id:'anliegen', kind:'multi', tick:'Anliegen', eyebrow:'Einstieg & Zielsetzung',
+        question:'Was beschreibt dein Anliegen am besten?', hint:'Mehrfachauswahl möglich',
+        options:[
+          { value:'Geschäftsmodelle & Angebote digitalisieren' },
+          { value:'Unternehmensprozesse optimieren & automatisieren' },
+          { value:'Neue Produkte/Service-Ideen testen (Prototyping)' },
+          { value:'Fachkräfte & Talente finden (Employer Branding)' },
+          { value:'Innovationskultur & Skills im Team stärken' },
+          { value:'Sonstiges', other:true },
+        ] },
+      { id:'reifegrad', kind:'single', tick:'Reifegrad', eyebrow:'Vorkenntnisse',
+        question:'Wie schätzt du den digitalen Reifegrad deiner Organisation ein?',
+        options:[
+          { value:'Einstieg', desc:'Wir stehen am Anfang der Digitalisierung und suchen Orientierung.' },
+          { value:'Fortgeschritten', desc:'Wir nutzen digitale Prozesse und wollen Innovation gezielt ausbauen.' },
+          { value:'Pionier', desc:'Wir arbeiten mit modernen Tech-Ansätzen und suchen Sparring & Netzwerke.' },
+        ] },
+      { id:'themen', kind:'multi', tick:'Themen', eyebrow:'Konkreter Themenbedarf',
+        question:'Welche Themen sind für dich aktuell besonders relevant?', hint:'Mehrfachauswahl möglich',
+        options:[
+          { value:'KI & Effizienz', desc:'KI-Implementierung, Prozessautomatisierung' },
+          { value:'Produktentwicklung', desc:'Prototyping, 3D-Druck, IoT, Hardware-Tests' },
+          { value:'Strategie & Innovation', desc:'Design Thinking, neue Geschäftsmodelle, Agile Transformation' },
+          { value:'IT-Sicherheit & Daten', desc:'Cybersecurity, Cloud-Lösungen, DSGVO-Konformität' },
+          { value:'Sichtbarkeit & Recruiting', desc:'Digitales Marketing, Talent-Scouting, Community-Events' },
+          { value:'Bedarfsorientierte Individuallösungen' },
+        ] },
+      { id:'zeitbudget', kind:'groups', tick:'Zeit & Format', eyebrow:'Zeitbudget & Wunscheinbindung',
+        question:'Wann passt es dir am besten?', hint:'Mehrfachauswahl möglich',
+        groups:[
+          { key:'wochentage', label:'Wochentage', layout:'chips', options:['Mo','Di','Mi','Do','Fr','Sa','So'] },
+          { key:'tageszeit', label:'Tageszeit', layout:'chips', options:['Morgens','Tagsüber','Abends'] },
+          { key:'dauer', label:'Dauer', layout:'chips', options:['Impulse & Pitch-Formate (1–2 Stunden)','Halbtags-Workshops (3–4 Stunden)','Tages-Inkubator / Sprint'] },
+          { key:'haeufigkeit', label:'Häufigkeit', layout:'chips', options:['Einmalig / Nach Bedarf','Regelmäßig','Quartalsweise'] },
+          { key:'format', label:'Welches Format bevorzugst du?', layout:'list', options:[
+            { value:'Exklusiver Inhouse-Workshop / Firmenschulung', desc:'Individuelles Format direkt bei dir im Unternehmen' },
+            { value:'B2B-Netzwerk- & Matchmaking-Events', desc:'Kontakte zu passenden Partnern und Unternehmen knüpfen' },
+            { value:'Strategie-Sparring & Fachberatung', desc:'Fachlicher Austausch zu deiner digitalen Strategie' },
+            { value:'Hackathons & Challenges', desc:'Problemstellungen von Talenten lösen lassen' },
+          ] },
+        ] },
+      { id:'abschluss', kind:'text', tick:'Abschluss', eyebrow:'Offener Abschluss (optional)',
+        question:'Welche konkrete Herausforderung in deinem Arbeitsalltag würdest du gerne lösen?',
+        placeholder:'Erzähl uns kurz davon … (optional)' },
+    ]
+  };
+
+  let state = { stage:'intro', role:null, path:null, step:0, answers:{} };
+
+  function setRole(roleId){
+    const role = ROLES.find(r => r.id === roleId);
+    state = { stage:'form', role:roleId, path:role.path, step:0, answers:{} };
+    const a = ACCENTS[role.accent];
+    document.documentElement.style.setProperty('--accent', a.base);
+    document.documentElement.style.setProperty('--accent-dark', a.dark);
+    document.documentElement.style.setProperty('--accent-soft', a.soft);
+    render();
+  }
+
+  function isStepComplete(q){
+    if(q.kind === 'single') return !!state.answers[q.id];
+    if(q.kind === 'multi') return (state.answers[q.id] || []).length > 0;
+    return true; // groups & text steps are optional
+  }
+
+  function updateNextButton(q){
+    const btn = document.getElementById('next-btn');
+    if(btn) btn.disabled = !isStepComplete(q);
+  }
+
+  /* ---- Targeted (non-full-rerender) interaction handlers: keep the
+     screen still while ticking a box; only navigation re-renders. ---- */
+
+  function handleSingleClick(q, btnEl, container){
+    state.answers[q.id] = btnEl.dataset.value;
+    container.querySelectorAll('.option').forEach(el => {
+      el.classList.toggle('selected', el === btnEl);
+    });
+    updateNextButton(q);
+  }
+
+  function handleMultiClick(q, btnEl){
+    const value = btnEl.dataset.value;
+    const arr = state.answers[q.id] || (state.answers[q.id] = []);
+    const i = arr.indexOf(value);
+    const nowSelected = i === -1;
+    if(nowSelected) arr.push(value); else arr.splice(i,1);
+    btnEl.classList.toggle('selected', nowSelected);
+
+    const opt = q.options.find(o => (typeof o === 'string' ? o : o.value) === value);
+    if(opt && opt.other){
+      let input = btnEl.nextElementSibling;
+      const hasInput = input && input.classList && input.classList.contains('other-input');
+      if(nowSelected && !hasInput){
+        btnEl.insertAdjacentHTML('afterend', `<input type="text" class="other-input" placeholder="Kurz beschreiben …" value="${escapeHtml(state.answers[q.id+'__other']||'')}" />`);
+        const newInput = btnEl.nextElementSibling;
+        newInput.addEventListener('input', e => { state.answers[q.id+'__other'] = e.target.value; });
+        newInput.addEventListener('click', e => e.stopPropagation());
+      } else if(!nowSelected && hasInput){
+        input.remove();
+      }
+    }
+    updateNextButton(q);
+  }
+
+  function handleGroupClick(fullKey, btnEl){
+    const value = btnEl.dataset.value;
+    const arr = state.answers[fullKey] || (state.answers[fullKey] = []);
+    const i = arr.indexOf(value);
+    const nowSelected = i === -1;
+    if(nowSelected) arr.push(value); else arr.splice(i,1);
+    btnEl.classList.toggle('selected', nowSelected);
+  }
+
+  function setTextAnswer(qid, text){
+    state.answers[qid] = text;
+  }
+
+  function next(){
+    const qs = QUESTIONS[state.path];
+    if(state.step < qs.length - 1){
+      state.step++;
+    } else {
+      state.stage = 'summary';
+    }
+    render();
+  }
+
+  function back(){
+    if(state.step > 0){ state.step--; }
+    else { state = { stage:'intro', role:null, path:null, step:0, answers:{} }; }
+    render();
+  }
+
+  function restart(){
+    state = { stage:'intro', role:null, path:null, step:0, answers:{} };
+    render();
+  }
+
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  /* Build one or more {label, value} rows per question, for summary + copy */
+  function buildRows(q){
+    const rows = [];
+    if(q.kind === 'single'){
+      rows.push({ label:q.eyebrow, value: state.answers[q.id] || '—' });
+    } else if(q.kind === 'multi'){
+      const arr = state.answers[q.id] || [];
+      let value = arr.length ? arr.join(', ') : '—';
+      const otherText = state.answers[q.id + '__other'];
+      if(arr.includes('Sonstiges') && otherText){ value = value.replace('Sonstiges', 'Sonstiges (' + otherText + ')'); }
+      rows.push({ label:q.eyebrow, value });
+    } else if(q.kind === 'groups'){
+      q.groups.forEach(g => {
+        const arr = state.answers[q.id + '__' + g.key] || [];
+        rows.push({ label:g.label, value: arr.length ? arr.join(', ') : '—' });
+      });
+    } else if(q.kind === 'text'){
+      rows.push({ label:q.eyebrow, value: (state.answers[q.id] || '').trim() || '—' });
+    }
+    return rows;
+  }
+
+  function copySummary(){
+    const qs = QUESTIONS[state.path];
+    const lines = qs.flatMap(buildRows).map(r => r.label + ': ' + r.value);
+    const roleTitle = ROLES.find(r => r.id === state.role).title;
+    const text = 'Makerport Bedarfsanalyse — ' + roleTitle + '\n' + lines.join('\n');
+    navigator.clipboard.writeText(text).then(()=>{
+      const note = document.getElementById('copy-note');
+      if(note){ note.style.opacity = 1; setTimeout(()=>{ note.style.opacity = 0; }, 2200); }
+    });
+  }
+
+  function renderTopbar(){
+    return `<div class="topbar">
+      <div class="wordmark">Maker<span>port</span></div>
+      <div class="kicker">Bedarfsanalyse</div>
+    </div>`;
+  }
+
+  function renderIntro(){
+    const cards = ROLES.map(r => `
+      <button class="path-card" data-role="${r.id}" style="--role-accent:${ACCENTS[r.accent].base}">
+        <div class="path-icon">${r.badge}</div>
+        <div class="path-title">${r.title}</div>
+        <div class="path-desc">${r.desc}</div>
+        <div class="path-cta">Auswählen</div>
+      </button>
+    `).join('');
+    return `
+      ${renderTopbar()}
+      <div class="hero-question">In welcher Rolle bist du heute hier?</div>
+      <div class="paths">${cards}</div>
+    `;
+  }
+
+  function renderRail(){
+    const qs = QUESTIONS[state.path];
+    const total = qs.length;
+    const pct = (state.step / (total - 1)) * 100;
+    const label = ROLES.find(r => r.id === state.role).title;
+    const ticks = qs.map((q,i)=>{
+      let cls = 'rail-tick';
+      if(i < state.step) cls += ' done';
+      if(i === state.step) cls += ' active';
+      return `<div class="${cls}">${q.tick}</div>`;
+    }).join('');
+    return `
+      <div class="rail-wrap">
+        <div class="rail-meta"><span>${label}</span><strong>Schritt ${state.step+1} / ${total}</strong></div>
+        <div class="rail"><div class="rail-fill" style="width:${pct}%"></div></div>
+        <div class="rail-ticks">${ticks}</div>
+      </div>
+    `;
+  }
+
+  function renderSingleOrMultiOption(q, opt, isMulti){
+    const value = typeof opt === 'string' ? opt : opt.value;
+    const desc = typeof opt === 'string' ? null : opt.desc;
+    const isOther = typeof opt === 'object' && opt.other;
+    const selected = isMulti
+      ? (state.answers[q.id] || []).includes(value)
+      : state.answers[q.id] === value;
+    const indicator = isMulti ? `<span class="check"></span>` : `<span class="dot"></span>`;
+    const otherVal = state.answers[q.id + '__other'] || '';
+    const otherField = (isOther && selected) ? `
+      <input type="text" class="other-input" data-other-for="${q.id}" placeholder="Kurz beschreiben …" value="${escapeHtml(otherVal)}" />
+    ` : '';
+    return `
+      <button class="option${selected?' selected':''}" data-value="${escapeHtml(value)}">
+        ${indicator}
+        <span class="option-main">
+          <span>${escapeHtml(value)}</span>
+          ${desc ? `<span class="option-desc">${escapeHtml(desc)}</span>` : ''}
+        </span>
+      </button>
+      ${otherField}
+    `;
+  }
+
+  function renderGroupsStep(q){
+    const blocks = q.groups.map(g => {
+      const fullKey = q.id + '__' + g.key;
+      if(g.layout === 'chips'){
+        const chips = g.options.map(opt => {
+          const selected = (state.answers[fullKey] || []).includes(opt);
+          return `<button class="chip${selected?' selected':''}" data-group="${fullKey}" data-value="${escapeHtml(opt)}">${escapeHtml(opt)}</button>`;
+        }).join('');
+        return `<div class="group-block"><div class="group-label">${g.label}</div><div class="chip-row">${chips}</div></div>`;
+      } else {
+        const items = g.options.map(opt => {
+          const selected = (state.answers[fullKey] || []).includes(opt.value);
+          return `<button class="option${selected?' selected':''}" data-group="${fullKey}" data-value="${escapeHtml(opt.value)}">
+            <span class="check"></span>
+            <span class="option-main"><span>${escapeHtml(opt.value)}</span><span class="option-desc">${escapeHtml(opt.desc)}</span></span>
+          </button>`;
+        }).join('');
+        return `<div class="group-block"><div class="group-label">${g.label}</div><div class="options">${items}</div></div>`;
+      }
+    }).join('');
+    return blocks;
+  }
+
+  function renderQuestion(){
+    const qs = QUESTIONS[state.path];
+    const q = qs[state.step];
+    const isLast = state.step === qs.length - 1;
+    const complete = isStepComplete(q);
+
+    let body = '';
+    if(q.kind === 'single'){
+      body = `<div class="options">${q.options.map(o => renderSingleOrMultiOption(q, o, false)).join('')}</div>`;
+    } else if(q.kind === 'multi'){
+      body = `<div class="options">${q.options.map(o => renderSingleOrMultiOption(q, o, true)).join('')}</div>`;
+    } else if(q.kind === 'groups'){
+      body = renderGroupsStep(q);
+    } else if(q.kind === 'text'){
+      const val = state.answers[q.id] || '';
+      body = `<textarea class="textarea" id="text-answer" placeholder="${escapeHtml(q.placeholder||'')}">${escapeHtml(val)}</textarea>`;
+    }
+
+    return `
+      ${renderTopbar()}
+      ${renderRail()}
+      <div class="q-card">
+        <div class="q-eyebrow">${q.eyebrow}</div>
+        <div class="q-title">${q.question}</div>
+        ${q.hint ? `<div class="q-hint">${q.hint}</div>` : `<div class="q-hint">&nbsp;</div>`}
+        ${body}
+        <div class="nav">
+          <button class="btn btn-back" id="back-btn">Zurück</button>
+          <button class="btn btn-next" id="next-btn" ${complete ? '' : 'disabled'}>${isLast ? 'Zur Übersicht' : 'Weiter'}</button>
+        </div>
+      </div>
+      <div class="sheet-index">Schritt ${state.step+1} von ${qs.length}</div>
+    `;
+  }
+
+  function renderSummary(){
+    const qs = QUESTIONS[state.path];
+    const rows = qs.flatMap(buildRows).map(r => `
+      <div class="summary-row">
+        <div class="summary-label">${escapeHtml(r.label)}</div>
+        <div class="summary-value">${escapeHtml(r.value)}</div>
+      </div>
+    `).join('');
+    return `
+      ${renderTopbar()}
+      <div class="summary-card">
+        <div class="summary-head">Danke — hier deine Angaben.</div>
+        <div class="summary-sub">Wir nutzen das, um dir passende Formate im Makerport vorzuschlagen.</div>
+        <div class="summary-list">${rows}</div>
+        <div class="summary-actions">
+          <button class="link-btn primary" id="copy-btn">Antworten kopieren</button>
+          <button class="link-btn" id="restart-btn">Neu starten</button>
+          <span class="copy-note" id="copy-note" style="opacity:0;transition:opacity .2s;">Kopiert</span>
+        </div>
+      </div>
+    `;
+  }
+
+  function render(){
+    const app = document.getElementById('app');
+    if(state.stage === 'intro'){
+      app.innerHTML = renderIntro();
+      app.querySelectorAll('.path-card').forEach(el => {
+        el.addEventListener('click', () => setRole(el.dataset.role));
+      });
+    } else if(state.stage === 'form'){
+      app.innerHTML = renderQuestion();
+      const q = QUESTIONS[state.path][state.step];
+
+      if(q.kind === 'single'){
+        const container = app.querySelector('.q-card > .options');
+        container.querySelectorAll('.option').forEach(el => {
+          el.addEventListener('click', () => handleSingleClick(q, el, container));
+        });
+      } else if(q.kind === 'multi'){
+        app.querySelectorAll('.q-card > .options > .option').forEach(el => {
+          el.addEventListener('click', (e) => {
+            if(e.target.closest('.other-input')) return;
+            handleMultiClick(q, el);
+          });
+        });
+        const otherInput = app.querySelector('.other-input');
+        if(otherInput){
+          otherInput.addEventListener('input', (e) => { state.answers[q.id+'__other'] = e.target.value; });
+          otherInput.addEventListener('click', (e) => e.stopPropagation());
+        }
+      } else if(q.kind === 'groups'){
+        app.querySelectorAll('.chip, .group-block .options .option').forEach(el => {
+          el.addEventListener('click', () => handleGroupClick(el.dataset.group, el));
+        });
+      } else if(q.kind === 'text'){
+        const ta = document.getElementById('text-answer');
+        if(ta) ta.addEventListener('input', (e) => setTextAnswer(q.id, e.target.value));
+      }
+
+      document.getElementById('back-btn').addEventListener('click', back);
+      document.getElementById('next-btn').addEventListener('click', next);
+    } else if(state.stage === 'summary'){
+      app.innerHTML = renderSummary();
+      document.getElementById('copy-btn').addEventListener('click', copySummary);
+      document.getElementById('restart-btn').addEventListener('click', restart);
+    }
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
